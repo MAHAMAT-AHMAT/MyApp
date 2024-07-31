@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, ScrollView } from "react-native";
+import { ref, onValue } from "firebase/database";
 import Auth from "./components/Auth";
 import Gauges from "./components/Gauges";
 import Charts from "./components/Charts";
 import { auth, db } from "./components/firebaseConfig";
-import styles from "./components/styles"; // Importing styles from styles.js
+import styles from "./components/styles";
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -13,20 +14,14 @@ export default function App() {
   useEffect(() => {
     console.log("App mounted");
     if (user) {
-      const dataRef = db.ref("sensorData");
-      dataRef.on("value", (snapshot) => {
+      const dataRef = ref(db, "sensorData");
+      onValue(dataRef, (snapshot) => {
         const data = snapshot.val();
         const temperature = [];
         const humidity = [];
         for (let timestamp in data) {
-          const temp = data[timestamp].temperature;
-          const hum = data[timestamp].humidity;
-          if (isFinite(temp) && temp !== null) {
-            temperature.push(temp);
-          }
-          if (isFinite(hum) && hum !== null) {
-            humidity.push(hum);
-          }
+          temperature.push(data[timestamp].temperature);
+          humidity.push(data[timestamp].humidity);
         }
         setData({ temperature, humidity });
       });
@@ -53,8 +48,8 @@ export default function App() {
             <Button title="Déconnexion" onPress={handleLogout} />
           </View>
           <Gauges
-            temperature={data.temperature[0] || 0} // Valeur par défaut de 0 si null ou undefined
-            humidity={data.humidity[0] || 0} // Valeur par défaut de 0 si null ou undefined
+            temperature={data.temperature[0]}
+            humidity={data.humidity[0]}
           />
           <Charts data={data} />
         </>
