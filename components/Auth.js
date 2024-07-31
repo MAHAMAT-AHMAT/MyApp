@@ -1,6 +1,6 @@
-// components/Auth.js
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebaseConfig";
 
 const Auth = ({ onLogin }) => {
@@ -9,8 +9,7 @@ const Auth = ({ onLogin }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = () => {
-    auth
-      .signInWithEmailAndPassword(email, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         onLogin(userCredential.user);
       })

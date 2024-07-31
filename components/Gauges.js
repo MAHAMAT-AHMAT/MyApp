@@ -1,7 +1,7 @@
-// components/Gauges.js
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import { Svg, Circle, G, Text as SVGText } from "react-native-svg";
+import styles from "./styles";
 
 const Gauge = ({ value, max, label }) => {
   const radius = 50;
@@ -55,21 +55,5 @@ const Gauges = ({ temperature, humidity }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 20,
-  },
-  card: {
-    alignItems: "center",
-  },
-  label: {
-    marginTop: 10,
-    fontSize: 18,
-    color: "#333",
-  },
-});
 
 export default Gauges;
